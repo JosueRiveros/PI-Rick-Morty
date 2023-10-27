@@ -14,19 +14,25 @@ import { Routes, Route, useLocation, useNavigate} from 'react-router-dom';
 
 function App() {
  
- const EMAIL = "riveritos@gmail.com"
- const PASSWORD = "river123"
  const [access, setAccess] = useState(false)
  const navigate = useNavigate()
 
 
- const login = (userDataEmail, userDataPass) => {
-   if(userDataEmail.email===EMAIL && userDataPass.pass===PASSWORD){
-      setAccess(true);
-      navigate("/home");
-   }
- }
+   const login = async (userDataEmail, userDataPass) => {
 
+   try {
+      const { email } = userDataEmail;
+      const { pass } = userDataPass;
+      const URL = 'http://localhost:3001/rickandmorty/login/'
+      const { data } = await axios(URL + `?email=${email}&password=${pass}`)
+      const { access } = data;
+      setAccess(data)
+      access && navigate('/home')
+      
+   } catch (error) {
+      throw Error(error.message)
+   }
+   }
 
  const location = useLocation()  
  let [characters, setCharacters] = useState([])
@@ -34,24 +40,29 @@ function App() {
  useEffect(() => {
    !access && navigate("/")
    // eslint-disable-next-line
- },[access]);
+ },[access])
 
+ const onSearch = async (id) => {
+  try {
+  const { data } = await axios(`http://localhost:3001/rickandmorty/character/${id}`)
 
- function onSearch(id) {
-  axios(`https://rickandmortyapi.com/api/character/${id}`).then(({ data }) => {
-     if (data.name) {
-        setCharacters((oldChars) => [...oldChars, data]);
-     } else {
-        window.alert('¡No hay personajes con este ID!');
-     }
-  });
+  const charaRepeat = characters.find((chara) => chara.id == id)
+
+  if (charaRepeat){
+   alert("Ya tienes esa carta")
+  } else if (data.name){
+   setCharacters((oldChars) => [...oldChars, data])
+  }
+  } catch (error) {
+   alert("Esa carta no existe")
+  }
 }
 
 const onClose = (id) => {
-  const charactersFiltered = characters.filter(character =>
-  character.id !== Number(id))
-  setCharacters(charactersFiltered)
-  }
+   const charactersFiltered = characters.filter(character =>
+   character.id !== id)
+   setCharacters(charactersFiltered)
+   }
 
    return (
       <div className='App'>
