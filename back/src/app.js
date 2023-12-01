@@ -1,6 +1,7 @@
 /* server config */
 const express = require("express")
 const server = express()
+const morgan = require("morgan")
 
 /* router */
 const { router } = require("./routes/index")
@@ -20,6 +21,8 @@ server.use((req, res, next) => {
     );
     next();
  })
+
+server.use(morgan("dev"))
 server.use(express.json())
 
 /* Este middleware agrega a todas las rutas dentro del router "/rickandmorty". Entonces, por ejemplo: 

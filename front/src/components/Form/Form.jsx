@@ -6,8 +6,6 @@ import validationPass from "../validationPass";
 
 const Form = ({login}) => {
    
-   const EMAIL = "riveritos@gmail.com"
-   const PASSWORD = "river123"
 
    const [errorsEmail, setErrorsEmail] = useState([])
 
@@ -65,7 +63,7 @@ const Form = ({login}) => {
             <input name="pass" type="text" placeholder="Ingrese una contraseña" value={userDataPass.pass} onChange={handleOnChangePass}/>
             {errorsPass && <p style={{color:"red"}}>{errorsPass}</p>}
             <hr/>
-            <button disabled={userDataEmail.email!==EMAIL || userDataPass.pass!==PASSWORD}>Ingresar</button>
+            <button>Ingresar</button>
             
         </form>
         

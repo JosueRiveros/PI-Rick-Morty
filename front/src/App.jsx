@@ -30,7 +30,7 @@ function App() {
       access && navigate('/home')
       
    } catch (error) {
-      throw Error(error.message)
+      alert("Credenciales incorrectas");
    }
    }
 
